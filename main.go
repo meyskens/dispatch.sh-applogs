@@ -24,6 +24,9 @@ func main() {
 			AddFunc: func(obj interface{}) {
 				pod := obj.(*v1.Pod)
 				if pod.Status.Phase == "Running" {
+					if _, exists := pod.GetObjectMeta().GetLabels()["release"]; !exists {
+						return
+					}
 					for _, container := range pod.Spec.Containers {
 						go follow(pod.GetObjectMeta().GetLabels()["release"], pod.GetName(), container.Name)
 					}
@@ -32,6 +35,9 @@ func main() {
 			UpdateFunc: func(oldObj, newObj interface{}) {
 				pod := newObj.(*v1.Pod)
 				if pod.Status.Phase == "Running" {
+					if _, exists := pod.GetObjectMeta().GetLabels()["release"]; !exists {
+						return
+					}
 					for _, container := range pod.Spec.Containers {
 						go follow(pod.GetObjectMeta().GetLabels()["release"], pod.GetName(), container.Name)
 					}
