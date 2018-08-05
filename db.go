@@ -11,11 +11,11 @@ import (
 var mongo *mgo.Database
 
 type logEntry struct {
-	InternalName string `bson:"internalName"`
-	Pod          string
-	Container    string
-	Line         string
-	Time         time.Time
+	InternalName string    `json:"internalName", bson:"internalName"`
+	Pod          string    `json:"pod", bson:"pod"`
+	Container    string    `json:"container", bson:"container"`
+	Line         string    `json:"line", bson:"line"`
+	Time         time.Time `json:"time", bson:"time"`
 }
 
 func init() {
