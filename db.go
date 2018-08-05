@@ -11,7 +11,7 @@ import (
 var mongo *mgo.Database
 
 type logEntry struct {
-	InternalName string
+	InternalName string `bson:"internalName"`
 	Pod          string
 	Container    string
 	Line         string
@@ -24,6 +24,24 @@ func init() {
 		panic(err)
 	}
 	mongo = session.DB(os.Getenv("MONGODB_DB"))
+
+	index := mgo.Index{
+		Key:        []string{"internalName", "time"},
+		Unique:     false,
+		DropDups:   false,
+		Background: true, // See notes.
+	}
+
+	expire := mgo.Index{
+		Key:         []string{"time"},
+		Unique:      false,
+		DropDups:    false,
+		Background:  true, // See notes.
+		ExpireAfter: 720 * time.Hour,
+	}
+	mongo.C("app_logs").EnsureIndex(index)
+	mongo.C("app_logs").EnsureIndex(expire)
+
 }
 
 func sendToDB(entry logEntry) {
