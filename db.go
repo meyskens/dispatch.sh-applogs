@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	mgo "gopkg.in/mgo.v2"
+	mgo "github.com/globalsign/mgo"
 )
 
 var mongo *mgo.Database
