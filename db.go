@@ -28,6 +28,7 @@ func init() {
 		Password: os.Getenv("MONGODB_PASSWORD"),
 	})
 	mongo = session.DB(os.Getenv("MONGODB_DB"))
+	mongo.Login(os.Getenv("MONGODB_USERNAME"), os.Getenv("MONGODB_PASSWORD"))
 
 	index := mgo.Index{
 		Key:        []string{"internalName", "time"},
