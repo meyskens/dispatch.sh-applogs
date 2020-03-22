@@ -23,6 +23,10 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	session.Login(&mgo.Credential{
+		Username: os.Getenv("MONGODB_USERNAME"),
+		Password: os.Getenv("MONGODB_PASSWORD"),
+	})
 	mongo = session.DB(os.Getenv("MONGODB_DB"))
 
 	index := mgo.Index{
